@@ -62,6 +62,68 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
+    // login for admin/teacher
+    public function loginAdmin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        $remember = $request->has('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+            
+            // TODO: Check if user is admin/teacher (role check)
+            // For now, allow any user to login as admin
+            // if ($user->role !== 'admin' && $user->role !== 'teacher') {
+            //     Auth::logout();
+            //     return back()->withErrors([
+            //         'email' => 'Tài khoản không có quyền quản trị.',
+            //     ])->onlyInput('email');
+            // }
+            
+            $request->session()->regenerate();
+            return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công!');
+        }
+
+        return back()->withErrors([
+            'email' => 'Email hoặc mật khẩu không đúng.',
+        ])->onlyInput('email');
+    }
+
+    // login for student
+    public function loginStudent(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        $remember = $request->has('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+            
+            // TODO: Check if user is student (role check)
+            // For now, allow any user to login as student
+            // if ($user->role !== 'student') {
+            //     Auth::logout();
+            //     return back()->withErrors([
+            //         'email' => 'Tài khoản không phải học sinh/sinh viên.',
+            //     ])->onlyInput('email');
+            // }
+            
+            $request->session()->regenerate();
+            return redirect()->route('dashboard')->with('success', 'Đăng nhập thành công!');
+        }
+
+        return back()->withErrors([
+            'email' => 'Email hoặc mật khẩu không đúng.',
+        ])->onlyInput('email');
+    }
+
     // logout
     public function logout(Request $request)
     {

@@ -18,8 +18,6 @@
     <!-- Custom CSS -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @stack('styles')
-    
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="@yield('body-class', '')">
     <!-- Loading Spinner -->
@@ -30,7 +28,15 @@
     </div>
 
     <!-- Navigation -->
-    @include('layouts.partials.navbar')
+    @auth
+        @if(request()->routeIs('admin.*'))
+            @include('layouts.partials.navbar-admin')
+        @else
+            @include('layouts.partials.navbar-student')
+        @endif
+    @else
+        @include('layouts.partials.navbar')
+    @endauth
 
     <!-- Flash Messages -->
     @include('layouts.partials.flash-messages')
@@ -51,13 +57,32 @@
     <script>
         // Hide loading spinner when page loads
         window.addEventListener('load', function() {
-            document.getElementById('loading-spinner').style.display = 'none';
+            const spinner = document.getElementById('loading-spinner');
+            if (spinner) {
+                spinner.style.display = 'none';
+            }
         });
         
         // CSRF token for AJAX requests
         if (window.axios) {
             window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         }
+        
+        // Initialize Bootstrap dropdowns manually (fallback)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if Bootstrap is loaded
+            if (typeof bootstrap !== 'undefined') {
+                console.log('Bootstrap loaded successfully:', bootstrap.Dropdown.VERSION);
+                
+                // Initialize all dropdowns
+                const dropdownElementList = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+                const dropdownList = [...dropdownElementList].map(dropdownToggleEl => new bootstrap.Dropdown(dropdownToggleEl));
+                
+                console.log('Initialized', dropdownList.length, 'dropdowns');
+            } else {
+                console.error('Bootstrap not loaded!');
+            }
+        });
     </script>
 </body>
 </html>
