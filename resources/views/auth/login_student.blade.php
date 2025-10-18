@@ -46,13 +46,28 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-
-    <!-- Remember Me -->
-    <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
-        <label class="form-check-label" for="remember">
-            Ghi nhớ đăng nhập
-        </label>
+    
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+            <label class="form-check-label" for="remember">
+                Ghi nhớ đăng nhập
+            </label>
+        </div>
+        <a href="{{ route('password.request') }}" class="text-decoration-none">
+            Quên mật khẩu?
+        </a>
+    </div>
+    
+    <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-box-arrow-in-right me-2"></i> Đăng nhập
+        </button>
+    </div>
+    <div class="d-grid mb-3">
+        <a href="{{ route('google.redirect') }}" class="btn btn-outline-danger mb-2">
+            <i class="bi bi-google me-2"></i> Đăng nhập bằng Google
+        </a>
     </div>
 
     <!-- Submit Button -->

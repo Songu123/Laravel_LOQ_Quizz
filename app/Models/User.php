@@ -20,17 +20,15 @@ class User extends Authenticatable implements MustVerifyEmail // ✅ Thêm imple
      */
     protected $fillable = [
         'name',
-        'email', 
+        'email',
         'password',
         'provider',
         'provider_id',
-        'role',
-        'student_id',
         'phone',
         'address',
         'bio',
         'avatar',
-        'is_active',
+        'role',
     ];
 
     /**
